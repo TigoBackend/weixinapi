@@ -109,7 +109,29 @@ class WeixinApi
      * @param $url
      */
     public function share_url($url){
+        if (empty($url)){
+            if ($this->business_interface)$this->business_interface->log('share_url url is null');
+            return null;
+        }
+        $js_api_ticket = $this->get_js_api_ticket();
+        if (empty($js_api_ticket)){
+            if ($this->business_interface)$this->business_interface->log('share_url js_api_ticket is null');
+            return null;
+        }
+        $timestamp = time();
+        $nonce_str = $this->get_nonce_Str(16);
 
+        $str = "jsapi_ticket=$js_api_ticket&noncestr=$nonce_str&timestamp=$timestamp&url=$url";
+        $signature = sha1($str);
+        $sign_package = [
+            'app_id'=>$this->config['app_id'],
+            'nonce_str'=>$nonce_str,
+            'timestamp'=>$timestamp,
+            'url'=>$url,
+            'signature'=>$signature,
+            'raw_string'=>$str,
+        ];
+        return $sign_package;
     }
 
 

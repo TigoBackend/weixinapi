@@ -26,5 +26,6 @@ return [
     'wx/getAccessToken'=>'index/WX/get_access_token',
     'wx/getCallbackIp'=>'index/WX/get_callback_ip',
     'wx/userInfo'=>'index/WX/get_subscribe_user_info',
+    'wx/share'=>'index/WX/share_url',
 
 ];

@@ -225,6 +225,20 @@ class WX
     }
 
 
+    public function share_url(){
+        try{
+            vendor('wxapi.index');
+            $interface = new InterfaceWXCommon();
+            $api = new \WeixinApi(config('wx_config'),$interface);
+            $rs = $api->share_url('www.baidu.com');
+            return $rs;
+        }catch (\Exception $e){
+            /*捕捉到异常做自己的异常处理业务如:记录日志,回滚事务等*/
+            return ['status'=>false];
+        }
+    }
+
+
 
 
 }
