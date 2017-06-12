@@ -214,9 +214,9 @@ class WX
             $interface = new InterfaceWXCommon();
             $api = new \WeixinApi(config('wx_config'),$interface);
             /*已关注用户*/
-//            $rs = $api -> get_subscribe_user_info('o09KlwiCtHz1IN__67Rg-HhqqF1k');
+            $rs = $api -> get_subscribe_user_info('o09KlwiCtHz1IN__67Rg-HhqqF1k');
             /*未关注用户*/
-            $rs = $api -> get_subscribe_user_info('o09Klwua9nCGJY0k8VovQVahaM9M');
+//            $rs = $api -> get_subscribe_user_info('o09Klwua9nCGJY0k8VovQVahaM9M');
             return $rs;
         }catch (\Exception $e){
             /*捕捉到异常做自己的异常处理业务如:记录日志,回滚事务等*/

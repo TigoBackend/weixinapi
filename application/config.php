@@ -239,13 +239,12 @@ return [
 
     /*微信配置*/
     'wx_config'=>[
-        'app_id'=>'wx6b07b8575d1f4115',     /*app_id*/
-        'app_secret'=>'050803e23890e3aa66f60c924640887d',
-        'mch_id'=>'1454286502',     /*商户号*/
-        /*'key'=>'050803e23890e3aa66f60c924640887d',*/  /*api密钥*/
-        'key'=>'lrOnveOpsjn9F6avfVAu3O1KmhPlhH1N',  /*api密钥*/
-        'token'=>'housecommunity20170330',      /*微信时间推送回调地址校验用token*/
-        'encodingaeskey'=>'lJi24KDwmdX85Bf6GNPfynVSB1Z4hSNGEGvJDCfaob0',
+        'app_id'=>'',     /*app_id*/
+        'app_secret'=>'',
+        'mch_id'=>'',     /*商户号*/
+        'key'=>'',  /*api密钥*/
+        'token'=>'',      /*微信时间推送回调地址校验用token*/
+        'encodingaeskey'=>'',
         'notify_url'=>"http://{$_SERVER['HTTP_HOST']}/payment/wxnotify",
     ],
 ];
