@@ -9,7 +9,7 @@
  * Time: 16:52
  *
  */
-class InterfaceWxApiCommon implements InterfaceWeixinApi
+class InterfaceWxApiCommon implements InterfaceWxApi
 {
 
     /*缓存文件前缀*/

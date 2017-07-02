@@ -7,7 +7,7 @@
  */
 
 
-interface InterfaceWeixinApi
+interface InterfaceWxApi
 {
 
     /**

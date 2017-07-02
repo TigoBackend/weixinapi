@@ -55,10 +55,10 @@ class WeixinApi
      * 微信api类构造函数
      * WeixinApi constructor.
      * @param array $wx_config    微信配置信息
-     * @param InterfaceWeixinApi|null $interface        自定义业务接口
+     * @param InterfaceWxApi|null $interface        自定义业务接口
      * @throws Exception
      */
-    public function __construct($wx_config,InterfaceWeixinApi $interface=null)
+    public function __construct($wx_config,InterfaceWxApi $interface=null)
     {
         if (!isset($wx_config['app_id']) || !isset($wx_config['app_secret'])) {
             if ($interface) $interface->log('WeixinApi wx_config exception!');

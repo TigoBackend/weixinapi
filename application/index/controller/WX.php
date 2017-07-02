@@ -176,8 +176,7 @@ class WX
     public function get_access_token(){
         try{
             vendor('wxapi.index');
-//            $interface = new InterfaceWXCommon();
-            $interface = new \InterfaceCommon();
+            $interface = new \InterfaceWxApiCommon();
             $api = new \WeixinApi(config('wx_config'),$interface);
             $rs = $api -> get_access_token();
             return ['access_token'=>$rs];
@@ -225,7 +224,7 @@ class WX
     }
 
     /**
-     * 封装微信
+     * 封装微信分享数据
      * @return array|null
      */
     public function share_url(){
@@ -243,7 +242,7 @@ class WX
 
 
     /**
-     * 拉取微信公众好菜单
+     * 拉取微信公众号菜单
      * @return mixed|null
      */
     public function pull_menu(){
@@ -255,7 +254,10 @@ class WX
     }
 
 
-
+    /**
+     * 发布微信公众号菜单
+     * @return array
+     */
     public function push_menu(){
         vendor('wxapi.index');
         $interface = new \InterfaceWxApiCommon();

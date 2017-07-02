@@ -11,6 +11,10 @@ class WeixinPayApi extends WeixinApi
 
     /*统一下单接口*/
     const API_UNIFIED_ORDER = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
+    /*企业支付接口*/
+    const API_BUSINESS_TRANSFER = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers';
+    /*红包发放接口*/
+    const API_RED_PACK = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack';
 
 
     public function __construct(array $wx_config, $interface = null)
@@ -168,7 +172,12 @@ class WeixinPayApi extends WeixinApi
     }
 
 
-
+    /**
+     * 企业支付
+     * @param $data
+     * @return bool
+     * @throws Exception
+     */
     public function business_transfer($data){
         $data['mch_appid'] = $this->config['app_id'];
         $data['mchid'] = $this->config['mch_id'];
@@ -178,11 +187,11 @@ class WeixinPayApi extends WeixinApi
         /*生成签名*/
         $sign = $this->make_sign($data);
         $data['sign'] = $sign;
+        if ($this->business_interface) $this -> business_interface ->log('企业支付begin:'.json_encode($data,JSON_UNESCAPED_UNICODE));
         $xml = $this->to_xml($data);
-        if ($this->business_interface) $this -> business_interface ->log('企业支付数据:'.json_encode($data,JSON_UNESCAPED_UNICODE));
 
         /*发出请求*/
-        $url = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers';
+        $url = self::API_BUSINESS_TRANSFER;
         $ch = curl_init();
         curl_setopt($ch,CURLOPT_TIMEOUT,30);
         curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
@@ -208,12 +217,74 @@ class WeixinPayApi extends WeixinApi
         if($data){
             curl_close($ch);
             $data = $this->to_array($data);
-            if ($this->business_interface) $this -> business_interface ->log('企业支付结果:'.json_encode($data,JSON_UNESCAPED_UNICODE));
+            if ($this->business_interface) $this -> business_interface ->log('企业支付end:'.json_encode($data,JSON_UNESCAPED_UNICODE));
             return $data;
         }else {
             $error = curl_errno($ch);
             /*echo "call faild, errorCode:$error\n";*/
             if ($this->business_interface) $this -> business_interface ->log('红包发送失败,error::'.$error);
+            curl_close($ch);
+            return false;
+        }
+    }
+
+
+    /**
+     * 红包发放
+     * @param $data
+     * @return bool
+     * @throws Exception
+     */
+    public function send_rend_pack($data){
+        $data['wxappid'] = $this->config['app_id'];
+        $data['mch_id'] = $this->config['mch_id'];
+        $data['nonce_str'] = $this->get_nonce_Str();
+        $data['total_num'] = 1;
+        if (!isset($data['wishing']))$data['wishing'] = '红包祝福';
+        if (!isset($data['send_name']))$data['send_name'] = '红包发送者';
+        if (!isset($data['client_ip']))$data['client_ip'] = $this->client_ip();
+        if (!isset($data['act_name']))$data['act_name'] = '活动名称';
+        if (!isset($data['remark']))$data['remark'] = '备注信息';
+        if (isset($data['risk_info'])){
+            $data['risk_info'] = urlencode(http_build_query($data));
+        }
+        $sign = $this->make_sign($data);
+        $data['sign'] = $sign;
+        if ($this->business_interface) $this -> business_interface ->log('红包发放begin:'.json_encode($data,JSON_UNESCAPED_UNICODE));
+        $xml = $this->to_xml($data);
+        /*发送请求*/
+        $url = self::API_RED_PACK;
+        $ch = curl_init();
+        curl_setopt($ch,CURLOPT_TIMEOUT,30);
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+        curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,false);
+        /*以下两种方式需选择一种*/
+        /*第一种方法，cert 与 key 分别属于两个.pem文件*/
+        /*curl_setopt($ch,CURLOPT_SSLCERTTYPE,'PEM');*/
+        curl_setopt($ch,CURLOPT_SSLCERT,VENDOR_PATH.'wxapi/cert/apiclient_cert.pem');
+        /*curl_setopt($ch,CURLOPT_SSLKEYTYPE,'PEM');*/
+        curl_setopt($ch,CURLOPT_SSLKEY,VENDOR_PATH.'wxapi/cert/apiclient_key.pem');
+        /*第二种方式，两个文件合成一个.pem文件*/
+        /*curl_setopt($ch,CURLOPT_SSLCERT,getcwd().'/all.pem');*/
+        /*设置头文件*/
+        /*if( count($aHeader) >= 1 ){
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $aHeader);
+        }*/
+
+        curl_setopt($ch,CURLOPT_POST, 1);
+        curl_setopt($ch,CURLOPT_POSTFIELDS,$xml);
+        $data = curl_exec($ch);
+        if ($data){
+            curl_close($ch);
+            $data = $this->to_array($data);
+            if ($this->business_interface) $this -> business_interface ->log('红包发放end:'.json_encode($data,JSON_UNESCAPED_UNICODE));
+            return $data;
+        }else{
+            $error = curl_errno($ch);
+            /*echo "call faild, errorCode:$error\n";*/
+            if ($this->business_interface) $this -> business_interface ->log('红包发送失败,error:'.$error);
             curl_close($ch);
             return false;
         }
