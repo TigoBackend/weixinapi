@@ -27,5 +27,7 @@ return [
     'wx/getCallbackIp'=>'index/WX/get_callback_ip',
     'wx/userInfo'=>'index/WX/get_subscribe_user_info',
     'wx/share'=>'index/WX/share_url',
+    'wx/pull_menu'=>'index/WX/pull_menu',
+    'wx/push_menu'=>'index/WX/push_menu',
 
 ];

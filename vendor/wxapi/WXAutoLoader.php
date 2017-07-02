@@ -13,7 +13,7 @@ class WXAutoLoader
         $name = $class;
         if (false !== strpos($name,'\\')) $name = strstr($class,'\\',true);
 
-        $filename = WX_API_PATH."/Api/$name.php";
+        $filename = WX_API_PATH."/api/$name.php";
         if (is_file($filename)){
             include $filename;
             return;

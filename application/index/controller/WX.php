@@ -214,9 +214,9 @@ class WX
             $interface = new InterfaceWXCommon();
             $api = new \WeixinApi(config('wx_config'),$interface);
             /*已关注用户*/
-            $rs = $api -> get_subscribe_user_info('o09KlwiCtHz1IN__67Rg-HhqqF1k');
+//            $rs = $api -> get_subscribe_user_info('o09KlwiCtHz1IN__67Rg-HhqqF1k');
             /*未关注用户*/
-//            $rs = $api -> get_subscribe_user_info('o09Klwua9nCGJY0k8VovQVahaM9M');
+            $rs = $api -> get_subscribe_user_info('o09Klwua9nCGJY0k8VovQVahaM9M');
             return $rs;
         }catch (\Exception $e){
             /*捕捉到异常做自己的异常处理业务如:记录日志,回滚事务等*/
@@ -224,7 +224,10 @@ class WX
         }
     }
 
-
+    /**
+     * 封装微信
+     * @return array|null
+     */
     public function share_url(){
         try{
             vendor('wxapi.index');
@@ -236,6 +239,43 @@ class WX
             /*捕捉到异常做自己的异常处理业务如:记录日志,回滚事务等*/
             return ['status'=>false];
         }
+    }
+
+
+    /**
+     * 拉取微信公众好菜单
+     * @return mixed|null
+     */
+    public function pull_menu(){
+        vendor('wxapi.index');
+        $interface = new \InterfaceWxApiCommon();
+        $api = new \WeixinApi(config('wx_config'),$interface);
+        $menus = $api->get_custom_menu();
+        return $menus;
+    }
+
+
+
+    public function push_menu(){
+        vendor('wxapi.index');
+        $interface = new \InterfaceWxApiCommon();
+        $api = new \WeixinApi(config('wx_config'),$interface);
+        $menus = [
+            'button'=>[
+                ['type'=>'view','name'=>'产品介绍','url'=>"http://wxhouse.58tuanju.com/about.html"],
+                ['type'=>'view','name'=>'新房任你搜','url'=>"http://wxhouse.58tuanju.com"],
+                [
+                    'name'=>'app下载',
+                    'sub_button'=>[
+                        ['type'=>'view','name'=>'用户端','url'=>"http://apphouseadmin.58tuanju.com/AppHouseApi/index/cusDown"],
+                        ['type'=>'view','name'=>'经纪端','url'=>"http://apphouseadmin.58tuanju.com/AppHouseApi/index/agentDown"],
+                    ]
+                ],
+            ],
+        ];
+
+        $rs = $api->create_custom_menu($menus);
+        return ['result'=>json_encode($rs)];
     }
 
 

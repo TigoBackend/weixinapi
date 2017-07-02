@@ -62,7 +62,7 @@ interface InterfaceWeixinApi
 
     /**
      * 缓存jsapi ticket
-     * @param $result
+     * @param array $result js_api_ticket 结构为['errcode'=>0,'errmsg'=>'ok','ticket'=>"bxLdikRXVbTPdHSM05e5u5sUoXNKd8-41ZO3MhKoyN5OfkWITDGgnr2fwJ0m9E8NYzWKVZvdVtaUgWvsdshFKA",'expires_in'=>7200]
      * @return mixed
      */
     public function cache_js_api_ticket($result);
@@ -71,9 +71,10 @@ interface InterfaceWeixinApi
 
     /**
      * 记录日志
-     * @param $msg
+     * @param string $msg           日志内容
+     * @param string $log_path     日志路径
      */
-    public function log($msg);
+    public function log($msg,$log_path = null);
 
 
 

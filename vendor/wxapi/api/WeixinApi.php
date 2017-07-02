@@ -15,6 +15,11 @@ class WeixinApi
     /*函数处理方案函数重定向*/
     const PROCESS_REDIRECT = 'REDIRECT';
 
+    /*请求方式GET*/
+    const CURL_REQUEST_METHOD_GET = 'GET';
+    /*请求方式POST*/
+    const CURL_REQUEST_METHOD_POST = 'POST';
+
     const SCOPE_TYPE_USER_INFO = 'snsapi_userinfo';
 
     const SCOPE_TYPE_BASE = 'snsapi_base';
@@ -36,8 +41,12 @@ class WeixinApi
     const API_AUTH_REFRESH_TOKEN = 'https://api.weixin.qq.com/sns/oauth2/refresh_token?';
     /*拉取用户信息*/
     const API_AUTH_USER_INFO = 'https://api.weixin.qq.com/sns/userinfo?';
-    /*获取ticket*/
+    /*获取js_api_ticket*/
     const API_GET_TICKET = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?';
+    /*创建自定义菜单*/
+    const API_CREATE_CUSTOM_MENU = 'https://api.weixin.qq.com/cgi-bin/menu/create?';
+    /*获取自定义菜单*/
+    const API_GET_CUSTOM_MENU = 'https://api.weixin.qq.com/cgi-bin/get_current_selfmenu_info?';
 
     protected $business_interface;
     protected $config;
@@ -105,8 +114,9 @@ class WeixinApi
     }
 
     /**
-     * 分享链接
+     * 封装分享链接数据
      * @param $url
+     * @return array|null
      */
     public function share_url($url){
         if (empty($url)){
@@ -280,6 +290,49 @@ class WeixinApi
     
 
     /*-------------------------------------------------网页授权系列end--------------------------------------------------------------------*/
+    /*-------------------------------------------------自定义菜单start--------------------------------------------------------------------*/
+
+
+    public function get_custom_menu(){
+        $access_token = $this->get_access_token();
+        if (!$access_token){
+            if ($this->business_interface) $this->business_interface->log('get_custom_menu access_token is null');
+            return null;
+        }
+        $url = self::API_GET_CUSTOM_MENU."access_token={$access_token}";
+        $result = $this->curl($url);
+        return $result;
+    }
+
+    /**
+     * @param array $param  菜单内容
+     * @return bool
+     */
+    public function create_custom_menu($param){
+        if (!$param){
+            if ($this->business_interface) $this->business_interface->log('get_custom_menu param is null');
+            return false;
+        }
+        $access_token = $this->get_access_token();
+        if (!$access_token){
+            if ($this->business_interface) $this->business_interface->log('get_custom_menu access_token is null');
+            return false;
+        }
+
+        $json = json_encode($param,JSON_UNESCAPED_UNICODE);
+        $json = urldecode($json);
+        $headers = [
+            'Content-Type: application/json',
+            'Content_Length: '.strlen($json),
+        ];
+        $url = self::API_CREATE_CUSTOM_MENU."access_token={$access_token}";
+        $result = $this->multi_curl($url,$json,self::CURL_REQUEST_METHOD_POST,$headers,true);
+
+        return json_decode($result,true);
+    }
+
+
+    /*-------------------------------------------------自定义菜单end--------------------------------------------------------------------*/
 
 
 
