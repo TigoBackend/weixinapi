@@ -436,6 +436,63 @@ class WeixinApi
     }
 
 
+    /**
+     * 多功能curl请求
+     * @param $url
+     * @param array $params
+     * @param string $method
+     * @param array $header
+     * @param bool $multi
+     * @return mixed
+     * @throws Exception
+     */
+    protected function multi_curl($url, $params = array(), $method = 'GET', $header = array(), $multi = false) {
+        $opts = array (
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_HTTPHEADER => $header
+        );
+        /* 根据请求类型设置特定参数 */
+        switch (strtoupper ( $method )) {
+            case 'GET' :
+                if(count($params) > 0){
+                    $url .= '&' . http_build_query ( $params );
+                }
+                $opts [CURLOPT_URL] = $url;
+                break;
+            case 'POST' : //要传送的所有数据
+                // 判断是否传输文件
+                $params = $multi ? $params : http_build_query ( $params );
+                $opts [CURLOPT_URL] = $url;
+                $opts [CURLOPT_POST] = 1;
+                $opts [CURLOPT_POSTFIELDS] = $params;
+                break;
+            default :
+                if ($this->business_interface) $this->business_interface->log('multi_curl wrong request method');
+                throw new Exception ( '不支持的请求方式！' );
+        }
+
+        /* 初始化并执行curl请求 */
+        $ch = curl_init ();
+        curl_setopt_array ( $ch, $opts );
+
+        $data = curl_exec ( $ch );
+        $error = curl_error ( $ch );
+        curl_close ( $ch );
+        if ($error){
+            if ($this->business_interface) $this->business_interface->log("multi_curl request error:{$error}");
+            throw new Exception ( '请求发生错误：' . $error );
+        }
+        return $data;
+    }
+
+
+    /**
+     * 验签微信消息推送接口
+     * @throws \think\Exception
+     */
     public function valid(){
         $rs = $_GET['echostr'];
         if ($this->check_signature()){
