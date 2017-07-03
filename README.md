@@ -6,8 +6,8 @@
 微信API扩展库位于以下第三方类库目录中,库目录如下:
 ~~~
 wxapidemo       项目根目录
-├─vendor                第三方类库目录
-    ├─wxapi             微信扩展库
+└─vendor                第三方类库目录
+    └─wxapi             微信扩展库
         ├─api           微信接口类目录
         ├─exception     异常目录
         │    └─WXException.php      微信异常类
