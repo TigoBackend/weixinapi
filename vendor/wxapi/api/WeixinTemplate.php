@@ -31,9 +31,9 @@ abstract class WeixinTemplate
      * 消息模板构造器
      * WeixinTemplate constructor.
      * @param array $option 消息模板信息
-     * @param InterfaceWeixinApi|null $interface  消息模板业务接口
+     * @param InterfaceWxApi|null $interface  消息模板业务接口
      */
-    function __construct($option,InterfaceWeixinApi $interface=null)
+    function __construct($option,InterfaceWxApi $interface=null)
     {
         $this->wx_config = $option['wx_config'];
         $this->touser = $option['open_id'];

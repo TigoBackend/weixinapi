@@ -18,9 +18,9 @@ class WeixinMsgTemplateApi extends WeixinApi
      * 消息模板api构造函数
      * WeixinMsgTemplateApi constructor.
      * @param array $wx_config
-     * @param InterfaceWeixinApi $interface
+     * @param InterfaceWxApi $interface
      */
-    public function __construct(array $wx_config,InterfaceWeixinApi $interface = null)
+    public function __construct(array $wx_config,InterfaceWxApi $interface = null)
     {
         parent::__construct($wx_config, $interface);
     }

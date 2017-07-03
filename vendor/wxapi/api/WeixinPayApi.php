@@ -17,7 +17,7 @@ class WeixinPayApi extends WeixinApi
     const API_RED_PACK = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack';
 
 
-    public function __construct(array $wx_config, $interface = null)
+    public function __construct(array $wx_config, InterfaceWxApi $interface = null)
     {
         parent::__construct($wx_config, $interface);
     }
