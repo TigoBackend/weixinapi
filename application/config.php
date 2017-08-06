@@ -247,4 +247,9 @@ return [
         'encodingaeskey'=>'',
         'notify_url'=>"http://{$_SERVER['HTTP_HOST']}/payment/wxnotify",
     ],
+
+    'qn_config'=>[
+        'access_key'=>'',   /*七牛access_key*/
+        'secret_key'=>'',   /*七牛secret_key*/
+    ],
 ];
