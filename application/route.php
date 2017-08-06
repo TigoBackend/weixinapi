@@ -18,6 +18,12 @@ return [
         ':name' => ['index/hello', ['method' => 'post']],
     ],
 
+    'test'=>'index/Index/test',
+    
+    
+    /*微信接口start*/
+
+
     'wx'=>'index/WX/index',
     /*微信消息推送处理接口*/
     'wx/msgHandle'=>'index/WX/msg_handle',
@@ -47,4 +53,22 @@ return [
     'wx/call_back'=>'index/WXPay/wx_pay_notify',
     /*获取微信支付签名数据*/
     'wx/get_pay'=>'index/WXPay/wx_pay_api',
+
+    /*微信接口end*/
+
+    /*七牛接口start*/
+    'qn/copy'=>'qiniu/Index/file_copy',     /*文件复制*/
+    'qn/move'=>'qiniu/Index/file_move',     /*文件移动*/
+    'qn/status'=>'qiniu/Index/file_status',     /*文件状态*/
+    'qn/drop'=>'qiniu/Index/file_delete',     /*文件状态*/
+    'qn/fetch'=>'qiniu/Index/file_fetch',     /*抓取网络图片到bucket*/
+    'qn/thumb'=>'qiniu/Index/thumbnail',     /*抓取网络图片到bucket*/
+    'qn/water_img'=>'qiniu/Index/water_img',     /*抓取网络图片到bucket*/
+    'qn/water_text'=>'qiniu/Index/water_text',     /*抓取网络图片到bucket*/
+    'qn/upload_file'=>'qiniu/Index/upload_file',     /*抓取网络图片到bucket*/
+
+
+    /*七牛接口end*/
+
+
 ];
